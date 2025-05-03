@@ -76,22 +76,7 @@ if "messages" not in st.session_state:
         {"sender": "bot", "text": "Hi there! 👋 Nice to see you! Ask me anything about your campaign."}
     ]
 
-# 🔧 Render chat history inside styled box
-chat_html = "<div class='chat-box'>"
-
-for msg in st.session_state.messages:
-    role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
-    align = "flex-start" if msg["sender"] == "bot" else "flex-end"
-    chat_html += f"""
-        <div style='display: flex; justify-content: {align};'>
-            <div class='{role}'>{msg['text']}</div>
-        </div>
-    """
-
-chat_html += "</div>"
-st.markdown(chat_html, unsafe_allow_html=True)
-
-# 🔄 Input form with clear-on-submit
+# Input + Send Button using Form (clear on submit)
 with st.form(key="chat_form", clear_on_submit=True):
     col1, col2 = st.columns([9, 1])
     with col1:
@@ -99,7 +84,7 @@ with st.form(key="chat_form", clear_on_submit=True):
     with col2:
         send = st.form_submit_button("➤")
 
-# 🧠 Handle chatbot logic
+# Handle user input BEFORE rendering chat
 if send and user_input:
     st.session_state.messages.append({"sender": "user", "text": user_input})
     query = user_input.lower()
@@ -115,3 +100,17 @@ if send and user_input:
         reply = "Thanks for your question! We’ll get back to you with more info soon."
 
     st.session_state.messages.append({"sender": "bot", "text": reply})
+
+# ✅ Render the chat box with all messages
+chat_html = "<div class='chat-box'>"
+for msg in st.session_state.messages:
+    role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
+    align = "flex-start" if msg["sender"] == "bot" else "flex-end"
+    chat_html += f"""
+        <div style='display: flex; justify-content: {align};'>
+            <div class='{role}'>{msg['text']}</div>
+        </div>
+    """
+chat_html += "</div>"
+
+st.markdown(chat_html, unsafe_allow_html=True)
