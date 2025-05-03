@@ -76,22 +76,24 @@ if "messages" not in st.session_state:
     ]
 
 # Chat display
-with st.container():
-    for msg in st.session_state.messages:
-        role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
-        align = "flex-start" if msg["sender"] == "bot" else "flex-end"
-        st.markdown(f"""
-            <div style='display: flex; justify-content: {align};'>
-                <div class='{role}'>{msg['text']}</div>
-            </div>
-        """, unsafe_allow_html=True)
+st.markdown("<div class='chat-box'>", unsafe_allow_html=True)
+for msg in st.session_state.messages:
+    role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
+    align = "flex-start" if msg["sender"] == "bot" else "flex-end"
+    st.markdown(f"""
+        <div style='display: flex; justify-content: {align};'>
+            <div class='{role}'>{msg['text']}</div>
+        </div>
+    """, unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
-# Input and send
-col1, col2 = st.columns([9, 1])
-with col1:
-    user_input = st.text_input("Type your message here...", label_visibility="collapsed", key="user_input")
-with col2:
-    send = st.button("➤")
+# Input + Send Button using Form (safe clearing)
+with st.form(key="chat_form", clear_on_submit=True):
+    col1, col2 = st.columns([9, 1])
+    with col1:
+        user_input = st.text_input("Type your message here...", label_visibility="collapsed")
+    with col2:
+        send = st.form_submit_button("➤")
 
 # Handle input
 if send and user_input:
@@ -109,7 +111,3 @@ if send and user_input:
         reply = "Thanks for your question! We’ll get back to you with more info soon."
 
     st.session_state.messages.append({"sender": "bot", "text": reply})
-
-    # ✅ Reset input field
-    if "user_input" in st.session_state:
-        st.session_state["user_input"] = ""
