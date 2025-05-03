@@ -1,16 +1,12 @@
 import streamlit as st
 
-# CONFIG
+# Set page configuration
 st.set_page_config(page_title="Personalized Political Chatbot", layout="centered")
 
-# Customize user info
-USER_NAME = "Jessica Cowles"
-AVATAR_URL = "https://www.w3schools.com/howto/img_avatar2.png"
-
-# CSS Styling
-st.markdown(f"""
+# Custom CSS styling
+st.markdown("""
     <style>
-    .header {{
+    .header {
         background-color: #001f3f;
         padding: 1rem;
         border-top-left-radius: 15px;
@@ -18,14 +14,14 @@ st.markdown(f"""
         color: white;
         display: flex;
         align-items: center;
-    }}
-    .header img {{
+    }
+    .header img {
         border-radius: 50%;
         width: 40px;
         height: 40px;
         margin-right: 1rem;
-    }}
-    .chat-box {{
+    }
+    .chat-box {
         background-color: #f1f1f1;
         height: 400px;
         overflow-y: auto;
@@ -35,56 +31,61 @@ st.markdown(f"""
         margin-bottom: 1rem;
         display: flex;
         flex-direction: column;
-    }}
-    .user-msg, .bot-msg {{
+    }
+    .user-msg, .bot-msg {
         max-width: 75%;
         padding: 0.6rem 1rem;
         margin: 0.5rem 0;
         border-radius: 20px;
         display: inline-block;
-        font-size: 0.95rem;
-    }}
-    .user-msg {{
+    }
+    .user-msg {
         background-color: #001f3f;
         color: white;
         align-self: flex-end;
         margin-left: auto;
-    }}
-    .bot-msg {{
+    }
+    .bot-msg {
         background-color: #e0e0e0;
         color: black;
         align-self: flex-start;
         margin-right: auto;
-    }}
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Header with avatar and name
-st.markdown(f"""
-    <div class='header'>
-        <img src="{AVATAR_URL}" />
-        <div>
-            <div><strong>Chat with {USER_NAME}</strong></div>
-            <small>We're online</small>
-        </div>
+# Header UI
+st.markdown("""
+<div class='header'>
+    <img src='https://www.w3schools.com/w3images/avatar2.png' />
+    <div>
+        <div><strong>Chat with Personalized Political Chatbot</strong></div>
+        <small>We're online</small>
     </div>
+</div>
 """, unsafe_allow_html=True)
 
-# Initialize session state
+# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"sender": "bot", "text": "Hi there! 👋 Nice to see you! Ask me anything about your campaign."}
+        {"sender": "bot", "text": "Hi there! I’m your Personalized Political Chatbot. Ask me anything about your campaign!"}
     ]
 
-# Input + Send Button using Form (clear on submit)
-with st.form(key="chat_form", clear_on_submit=True):
-    col1, col2 = st.columns([9, 1])
-    with col1:
-        user_input = st.text_input("Type your message here...", label_visibility="collapsed")
-    with col2:
-        send = st.form_submit_button("➤")
+# Display chat history
+st.markdown("<div class='chat-box'>", unsafe_allow_html=True)
+for msg in st.session_state.messages:
+    role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
+    st.markdown(f"<div class='{role}'>{msg['text']}</div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
-# Handle user input BEFORE rendering chat
+# Input and send button
+col1, col2 = st.columns([9, 1])
+with col1:
+    user_input = st.text_input("Type your message here...", label_visibility="collapsed")
+with col2:
+    send = st.button("➤")
+
+# Handle response
 if send and user_input:
     st.session_state.messages.append({"sender": "user", "text": user_input})
     query = user_input.lower()
@@ -100,19 +101,3 @@ if send and user_input:
         reply = "Thanks for your question! We’ll get back to you with more info soon."
 
     st.session_state.messages.append({"sender": "bot", "text": reply})
-
-# # ✅ RENDER CHAT MESSAGES PROPERLY
-# chat_html = "<div class='chat-box'>"
-# for msg in st.session_state.messages:
-#     role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
-#     align = "flex-start" if msg["sender"] == "bot" else "flex-end"
-#     chat_html += f"""
-#         <div style='display: flex; justify-content: {align};'>
-#             <div class='{role}'>{msg['text']}</div>
-#         </div>
-#     """
-# chat_html += "</div>"
-
-# ✅ DO NOT USE st.write(chat_html)
-# ✅ THIS IS THE ONLY CORRECT DISPLAY METHOD:
-# st.markdown(chat_html, unsafe_allow_html=True)
