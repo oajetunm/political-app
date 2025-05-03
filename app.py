@@ -101,17 +101,17 @@ if send and user_input:
 
     st.session_state.messages.append({"sender": "bot", "text": reply})
 
-# ✅ RENDER CHAT MESSAGES PROPERLY
-chat_html = "<div class='chat-box'>"
-for msg in st.session_state.messages:
-    role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
-    align = "flex-start" if msg["sender"] == "bot" else "flex-end"
-    chat_html += f"""
-        <div style='display: flex; justify-content: {align};'>
-            <div class='{role}'>{msg['text']}</div>
-        </div>
-    """
-chat_html += "</div>"
+# # ✅ RENDER CHAT MESSAGES PROPERLY
+# chat_html = "<div class='chat-box'>"
+# for msg in st.session_state.messages:
+#     role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
+#     align = "flex-start" if msg["sender"] == "bot" else "flex-end"
+#     chat_html += f"""
+#         <div style='display: flex; justify-content: {align};'>
+#             <div class='{role}'>{msg['text']}</div>
+#         </div>
+#     """
+# chat_html += "</div>"
 
 # ✅ DO NOT USE st.write(chat_html)
 # ✅ THIS IS THE ONLY CORRECT DISPLAY METHOD:
