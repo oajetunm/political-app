@@ -42,6 +42,7 @@ st.markdown(f"""
         margin: 0.5rem 0;
         border-radius: 20px;
         display: inline-block;
+        font-size: 0.95rem;
     }}
     .user-msg {{
         background-color: #001f3f;
@@ -75,19 +76,22 @@ if "messages" not in st.session_state:
         {"sender": "bot", "text": "Hi there! 👋 Nice to see you! Ask me anything about your campaign."}
     ]
 
-# Chat display
-st.markdown("<div class='chat-box'>", unsafe_allow_html=True)
+# 🔧 Render chat history inside styled box
+chat_html = "<div class='chat-box'>"
+
 for msg in st.session_state.messages:
     role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
     align = "flex-start" if msg["sender"] == "bot" else "flex-end"
-    st.markdown(f"""
+    chat_html += f"""
         <div style='display: flex; justify-content: {align};'>
             <div class='{role}'>{msg['text']}</div>
         </div>
-    """, unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
+    """
 
-# Input + Send Button using Form (safe clearing)
+chat_html += "</div>"
+st.markdown(chat_html, unsafe_allow_html=True)
+
+# 🔄 Input form with clear-on-submit
 with st.form(key="chat_form", clear_on_submit=True):
     col1, col2 = st.columns([9, 1])
     with col1:
@@ -95,12 +99,12 @@ with st.form(key="chat_form", clear_on_submit=True):
     with col2:
         send = st.form_submit_button("➤")
 
-# Handle input
+# 🧠 Handle chatbot logic
 if send and user_input:
     st.session_state.messages.append({"sender": "user", "text": user_input})
     query = user_input.lower()
 
-    # Dummy replies
+    # Dummy responses
     if "fundraising" in query:
         reply = "Our top fundraising goal for this quarter is $250,000 to support local outreach."
     elif "donor" in query or "new york" in query:
