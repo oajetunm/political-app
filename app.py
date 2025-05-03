@@ -109,4 +109,7 @@ if send and user_input:
         reply = "Thanks for your question! We’ll get back to you with more info soon."
 
     st.session_state.messages.append({"sender": "bot", "text": reply})
-    st.session_state.user_input = ""  # Clear input field
+
+    # ✅ Reset input field
+    if "user_input" in st.session_state:
+        st.session_state["user_input"] = ""
