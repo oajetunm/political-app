@@ -1,5 +1,5 @@
 # Enhanced Streamlit app code with improved UI based on the provided design
-enhanced_app_code = """
+
 import streamlit as st
 
 # Page configuration
@@ -104,26 +104,3 @@ if send_clicked and user_input:
         reply = "Thanks for your question! We’ll get back to you with more info soon."
 
     st.session_state.messages.append({'sender': 'bot', 'text': reply})
-"""
-import os
-# Save updated enhanced UI to app.py
-enhanced_dir = "/mnt/data/enhanced_political_chatbot"
-os.makedirs(enhanced_dir, exist_ok=True)
-
-with open(f"{enhanced_dir}/app.py", "w") as f:
-    f.write(enhanced_app_code)
-
-# requirements.txt remains the same
-with open(f"{enhanced_dir}/requirements.txt", "w") as f:
-    f.write("streamlit\n")
-
-# Zip the enhanced version
-zip_path = "/mnt/data/enhanced_political_chatbot.zip"
-with ZipFile(zip_path, "w") as zipf:
-    for root, _, files in os.walk(enhanced_dir):
-        for file in files:
-            filepath = os.path.join(root, file)
-            arcname = os.path.relpath(filepath, enhanced_dir)
-            zipf.write(filepath, arcname)
-
-zip_path
