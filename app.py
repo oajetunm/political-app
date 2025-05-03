@@ -115,4 +115,4 @@ if send and user_input:
 
 # ✅ DO NOT USE st.write(chat_html)
 # ✅ THIS IS THE ONLY CORRECT DISPLAY METHOD:
-st.markdown(chat_html, unsafe_allow_html=True)
+# st.markdown(chat_html, unsafe_allow_html=True)
