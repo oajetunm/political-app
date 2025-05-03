@@ -105,7 +105,7 @@ if send_clicked and user_input:
 
     st.session_state.messages.append({'sender': 'bot', 'text': reply})
 """
-
+import os
 # Save updated enhanced UI to app.py
 enhanced_dir = "/mnt/data/enhanced_political_chatbot"
 os.makedirs(enhanced_dir, exist_ok=True)
