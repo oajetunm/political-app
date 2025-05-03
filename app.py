@@ -1,12 +1,10 @@
-# Enhanced Streamlit app code with improved UI based on the provided design
-
 import streamlit as st
 
-# Page configuration
+# Set page configuration
 st.set_page_config(page_title="Personalized Political Chatbot", layout="centered")
 
 # Custom CSS styling
-st.markdown(\"\"\"
+st.markdown("""
     <style>
     .header {
         background-color: #001f3f;
@@ -31,6 +29,8 @@ st.markdown(\"\"\"
         border: 1px solid #ccc;
         border-radius: 15px;
         margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
     }
     .user-msg, .bot-msg {
         max-width: 75%;
@@ -51,56 +51,53 @@ st.markdown(\"\"\"
         align-self: flex-start;
         margin-right: auto;
     }
-    .input-container {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-    }
     </style>
-\"\"\", unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# Header section
-st.markdown(\"\"\"<div class='header'>
+# Header UI
+st.markdown("""
+<div class='header'>
     <img src='https://www.w3schools.com/w3images/avatar2.png' />
     <div>
         <div><strong>Chat with Personalized Political Chatbot</strong></div>
         <small>We're online</small>
     </div>
-</div>\"\"\", unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-# Initialize session state
-if 'messages' not in st.session_state:
+# Initialize chat history
+if "messages" not in st.session_state:
     st.session_state.messages = [
-        {'sender': 'bot', 'text': "Hi there! I’m your Personalized Political Chatbot. Ask me anything about your campaign!"}
+        {"sender": "bot", "text": "Hi there! I’m your Personalized Political Chatbot. Ask me anything about your campaign!"}
     ]
 
-# Chat history display
+# Display chat history
 st.markdown("<div class='chat-box'>", unsafe_allow_html=True)
 for msg in st.session_state.messages:
-    msg_class = "bot-msg" if msg["sender"] == "bot" else "user-msg"
-    st.markdown(f"<div class='{msg_class}'>{msg['text']}</div>", unsafe_allow_html=True)
+    role = "bot-msg" if msg["sender"] == "bot" else "user-msg"
+    st.markdown(f"<div class='{role}'>{msg['text']}</div>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Input + Send button
+# Input and send button
 col1, col2 = st.columns([9, 1])
 with col1:
-    user_input = st.text_input("Enter your message", label_visibility="collapsed", placeholder="Type your message here...")
+    user_input = st.text_input("Type your message here...", label_visibility="collapsed")
 with col2:
-    send_clicked = st.button("➤")
+    send = st.button("➤")
 
-# Generate response
-if send_clicked and user_input:
-    st.session_state.messages.append({'sender': 'user', 'text': user_input})
-    input_lower = user_input.lower()
+# Handle response
+if send and user_input:
+    st.session_state.messages.append({"sender": "user", "text": user_input})
+    query = user_input.lower()
 
-    # Simulated responses
-    if "fundraising" in input_lower:
+    # Dummy responses
+    if "fundraising" in query:
         reply = "Our top fundraising goal for this quarter is $250,000 to support local outreach."
-    elif "donor" in input_lower or "new york" in input_lower:
+    elif "donor" in query or "new york" in query:
         reply = "Our top donors in New York include Jane Doe and Citizens for Liberty."
-    elif "engagement" in input_lower or "compare" in input_lower:
+    elif "engagement" in query or "compare" in query:
         reply = "Compared to other PACs, our engagement has increased by 15% over the last month."
     else:
         reply = "Thanks for your question! We’ll get back to you with more info soon."
 
-    st.session_state.messages.append({'sender': 'bot', 'text': reply})
+    st.session_state.messages.append({"sender": "bot", "text": reply})
