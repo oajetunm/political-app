@@ -78,8 +78,10 @@ def get_response(prompt):
         return "I'm not sure about that yet, but more features are coming soon!"
 
 # Handle user input
-if user_input:
+# Handle user input and respond
+if user_input and (len(st.session_state.messages) == 0 or user_input != st.session_state.messages[-1]["content"]):
     st.session_state.messages.append({"role": "user", "content": user_input})
     response = get_response(user_input)
     st.session_state.messages.append({"role": "bot", "content": response})
-    st.experimental_rerun()
+    # Clear the input field
+    st.session_state["user_input"] = ""
